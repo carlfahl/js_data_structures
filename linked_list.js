@@ -1,0 +1,61 @@
+/**
+ * Linked Lists - constructors and methods for creating and using linked lists.
+ *
+ * @module
+ *
+ */
+
+function Node (data) {
+  this.next = null;
+  this.data = data;
+}
+
+function List () {
+  this.head = null;
+  this.tail = null;
+  this.numElements = 0;
+}
+
+List.prototype.add = function (data) {
+  var node = new Node(data);
+  if(!this.head) { // There are no elements in list
+    this.head = node;
+    this.tail = node;
+  } else {
+    this.tail.next = node;
+    this.tail = node;
+  }
+  this.numElements++;
+};
+
+List.prototype.print = function () {
+  var current = this.head;
+  while(current) {
+    console.log(current.data);
+    current = current.next;
+  }
+};
+
+List.prototype.remove = function (data) {
+  var current = this.head;
+  while(current) {
+    if (current.next.data === data) {
+      current.next = current.next.next;
+      break;
+    }
+    current = current.next;
+  }
+};
+
+module.exports = List;
+
+var myList = new List();
+myList.print();
+myList.add(10);
+myList.add(5);
+myList.add(15);
+myList.add(20);
+myList.add(30);
+myList.print();
+myList.remove(15);
+myList.print();
