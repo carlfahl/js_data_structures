@@ -14,6 +14,7 @@
  *
  */
 function Node (data) {
+  this.previous = null;
   this.next = null;
   this.data = data;
 }
@@ -38,6 +39,7 @@ List.prototype.add = function (data) {
     this.tail = node;
   } else {
     this.tail.next = node;
+    node.previous = this.tail;
     this.tail = node;
   }
   this.numElements++;
@@ -58,7 +60,9 @@ List.prototype.insertAfter = function (data, nodeData) {
   while(current) {
     if (current.data === nodeData ) {
       node.next = current.next;
+      current.next.previous = node;
       current.next = node;
+      node.previous = current;
     }
     current = current.next;
   }
@@ -71,6 +75,7 @@ List.prototype.insertFirst = function (data) {
     this.tail = node;
   } else {
     node.next = this.head;
+    this.head.previous = node;
     this.head = node;
   }
 }
@@ -96,25 +101,39 @@ List.prototype.print = function () {
 List.prototype.remove = function (data) {
   var current = this.head;
   while(current) {
-    if (current.next.data === data) {
-      current.next = current.next.next;
+    if (current.data === data) {
+      current.previous.next = current.next;
+      current.next.previous = current.previous;
       break;
     }
     current = current.next;
   }
 };
 
+List.prototype.pop = function () {
+  var returnData = this.tail.data;
+  this.tail = this.tail.previous;
+  this.tail.next = null;
+  return returnData;
+}
+
 module.exports = List;
 
 var myList = new List();
 myList.print();
+console.log("======");
 myList.add(10);
 myList.add(5);
 myList.add(15);
 myList.add(20);
 myList.add(30);
-myList.insertAfter(50, 5);
+// myList.insertAfter(50, 5);
 myList.print();
-myList.remove(15);
+console.log("======");
+// myList.remove(15);
 myList.print();
+console.log("======");
 console.log(myList.length());
+console.log(myList.pop());
+console.log("======");
+myList.print();
